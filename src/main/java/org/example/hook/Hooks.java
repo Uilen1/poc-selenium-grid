@@ -33,7 +33,7 @@ public class Hooks {
 
             // Cria e retorna um novo TestContext para a feature
             TestContext testContext = new TestContext();
-            testContext.getDriver(browser).get("https://www.example.com");
+            testContext.getDriver(browser);
             return testContext;
         });
     }

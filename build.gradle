@@ -52,7 +52,7 @@ tasks.register('seleniumTest', Test) {
         systemProperty 'cucumber.execution.parallel.config.dynamic.factor', '1.0'
         systemProperty 'cucumber.execution.parallel.config.custom.class', ''
         systemProperty 'cucumber.execution.parallel.config.fixed.max-pool-size', '5'
-        systemProperty 'cucumber.execution.parallel.config.strategy', 'dynamic'
+        systemProperty 'cucumber.execution.parallel.config.strategy', 'fixed'
         systemProperty 'cucumber.execution.parallel.config.fixed.parallelism', '5'
         systemProperty 'cucumber.execution.parallel.enabled', 'true'
         println(">>>>>>>>>>> Execução em modo paralelo habilitada")
