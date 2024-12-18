@@ -29,7 +29,7 @@ public class Hooks {
 
         // Verifica se já existe um contexto para essa feature
         featureContexts.computeIfAbsent(featureName, key -> {
-            System.out.println("Iniciando WebDriver para feature: " + featureName);
+            System.out.println("Iniciando WebDriver para feature: " + key);
 
             // Cria e retorna um novo TestContext para a feature
             TestContext testContext = new TestContext();
