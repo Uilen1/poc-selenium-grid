@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+description = 'poc-selenium-grid'
+java.sourceCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+def junit = "5.8.2"
+def selenium = "4.7.2"
+def cucumber = "7.5.0"
+def slf4j = "2.0.0"
+
+dependencies {
+    implementation('org.junit.platform:junit-platform-suite:1.10.2')
+    implementation("org.junit.jupiter:junit-jupiter-api:${junit}")
+    implementation("org.junit.jupiter:junit-jupiter-engine:${junit}")
+    implementation("org.seleniumhq.selenium:selenium-java:${selenium}")
+    implementation("org.seleniumhq.selenium:selenium-chrome-driver:${selenium}")
+    implementation("org.seleniumhq.selenium:selenium-firefox-driver:${selenium}")
+    implementation("org.seleniumhq.selenium:selenium-http-jdk-client:${selenium}")
+    implementation("io.cucumber:cucumber-java:${cucumber}")
+    implementation("io.cucumber:cucumber-junit:${cucumber}")
+    implementation("io.cucumber:cucumber-junit-platform-engine:${cucumber}")
+    implementation("org.slf4j:slf4j-api:${slf4j}")
+    implementation("org.slf4j:slf4j-simple:${slf4j}")
+    implementation('org.slf4j:slf4j-simple:2.0.11')
+}
+
+/*
+* Task para o modulo de teste funcinais a partir do modulo MAIN
+*/
+tasks.register('seleniumTest', Test) {
+    useJUnitPlatform()
+    description = 'Runs selenium tests.'
+    group = 'verification'
+    systemProperty "cucumber.filter.tags", System.getProperty("cucumber.filter.tags")
+    def isParallelExecution = System.getProperty("parallelExecution", "true").toBoolean()
+    if (isParallelExecution) {
+        maxParallelForks = Runtime.runtime.availableProcessors()
+        forkEvery = 1
+        systemProperty 'cucumber.execution.parallel.config.dynamic.factor', '1.0'
+        systemProperty 'cucumber.execution.parallel.config.custom.class', ''
+        systemProperty 'cucumber.execution.parallel.config.fixed.max-pool-size', '5'
+        systemProperty 'cucumber.execution.parallel.config.strategy', 'dynamic'
+        systemProperty 'cucumber.execution.parallel.config.fixed.parallelism', '5'
+        systemProperty 'cucumber.execution.parallel.enabled', 'true'
+        println(">>>>>>>>>>> Execução em modo paralelo habilitada")
+    } else {
+        maxParallelForks = 1 // Configura para execução sequencial
+        systemProperty 'cucumber.execution.parallel.enabled', 'false'
+        println(">>>>>>>>>>> Execução em modo sequencial habilitada")
+    }
+    testClassesDirs = sourceSets.main.output.classesDirs
+    classpath = sourceSets.main.runtimeClasspath
+    shouldRunAfter test
+    // Log de eventos
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    afterSuite { desc, result ->
+        if (!desc.parent) { // Executado após a suite principal, para resumo
+            println "\n\nResultado: ${result.resultType} - Total de testes: ${result.testCount}"
+            println "Testes falhos: ${result.failedTestCount}, Skipped: ${result.skippedTestCount}"
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
