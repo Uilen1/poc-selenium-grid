@@ -45,7 +45,8 @@ tasks.register('seleniumTest', Test) {
     description = 'Runs selenium tests.'
     group = 'verification'
     systemProperty "cucumber.filter.tags", System.getProperty("cucumber.filter.tags")
-    def isParallelExecution = System.getProperty("parallelExecution", "true").toBoolean()
+    def isParallelExecution = System.getProperty("parallel.execution","true").toBoolean()
+    systemProperty "parallel.execution", isParallelExecution
     if (isParallelExecution) {
         maxParallelForks = Runtime.runtime.availableProcessors()
         forkEvery = 1
