@@ -21,7 +21,7 @@ public class BaseStep {
         TestContext testContext = Hooks.getTestContext(featureName);
 
         // Obtém o driver da feature
-        this.driver = testContext.getDriver("chrome");
+        this.driver = testContext.getDriver();
     }
 
     @Given("eu acesso a pagina inicial")

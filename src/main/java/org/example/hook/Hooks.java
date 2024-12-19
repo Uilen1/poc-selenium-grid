@@ -39,7 +39,7 @@ public class Hooks {
 
                 // Cria e retorna um novo TestContext para a feature
                 TestContext testContext = new TestContext();
-                testContext.getDriver(browser);
+                testContext.getDriver();
                 return testContext;
             });
         } else {
@@ -47,7 +47,7 @@ public class Hooks {
             if (singleTestContext == null) {
                 System.out.println("Iniciando WebDriver para execução sequencial.");
                 singleTestContext = new TestContext();
-                singleTestContext.getDriver(browser);
+                singleTestContext.getDriver();
             }
         }
     }

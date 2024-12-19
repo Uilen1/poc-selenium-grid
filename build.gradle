@@ -44,6 +44,9 @@ tasks.register('seleniumTest', Test) {
     useJUnitPlatform()
     description = 'Runs selenium tests.'
     group = 'verification'
+    systemProperty "webdriver.http.factory", "jdk-http-client"
+    systemProperty "webdriver.gecko.driver", "${projectDir}${File.separator}src${File.separator}main${File.separator}resources${File.separator}drivers${File.separator}geckodriver"
+    systemProperty "webdriver.chrome.driver", "${projectDir}${File.separator}src${File.separator}main${File.separator}resources${File.separator}drivers${File.separator}chromedriver_131"
     systemProperty "cucumber.filter.tags", System.getProperty("cucumber.filter.tags")
     def isParallelExecution = System.getProperty("parallel.execution","true").toBoolean()
     systemProperty "parallel.execution", isParallelExecution
